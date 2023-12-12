@@ -25,12 +25,17 @@ public class ViewOrderDetails extends VBox{
 	
 	Button proceedBtn, backBtn;
 	TableView<OrderItem> table;
-	TableView<MenuItem> table2;
 	TextField amount = new TextField();
 	TextField date = new TextField();
 	TextField type = new TextField();
+	int orderId, orderUserId, orderTotal;
+	String orderStatus;
+	Date orderDate;
+	VBox vb;
 	
 	public ViewOrderDetails(int orderId) {
+		this.orderId = orderId;
+
 		proceedBtn = new Button("Proceed");
 		backBtn = new Button("Back");
         
@@ -39,83 +44,43 @@ public class ViewOrderDetails extends VBox{
         titleBox.setAlignment(Pos.CENTER);
         
         //order info
-        VBox info = createOrderInfo(orderId);
+        VBox info = createOrderInfo();
         
         //table data
         table = createOrderItemTable();
-        table2 = createMenuItemTable();
         HBox data = new HBox();
-        data.getChildren().addAll(table, table2);
+        data.getChildren().addAll(table);
         
         //order item
         GridPane form = createPaymentForm();
         VBox.setMargin(form, new Insets(20));
         this.getChildren().addAll(titleBox, info, data, form);
 
-        Scene viewOrderScene = new Scene(this, 800, 600);
-        Main.getSceneStack().add(viewOrderScene);
+        Scene vodScene = new Scene(this, 800, 600);
+        Main.nextScene(vodScene);
 	}
 	
-	private VBox createOrderInfo(int ids) {
-		VBox vb = new VBox();
-		
-		ResultSet rs = Order.getOrderById(ids);
-		try {
-			Label id = new Label("Order ID: " + rs.getInt(1));
-			Label userId = new Label("User ID: " + rs.getInt(2));
-			Label status = new Label("Status: " + rs.getString(3));
-			Label date = new Label("Order Date: " + rs.getDate(4));
-			Label total = new Label("Total: " + rs.getInt(5));
-			
-			vb.getChildren().addAll(id, userId, status, date, total);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	private VBox createOrderInfo() {
+		vb = new VBox();
+		VBox.setMargin(vb, new Insets(20));
+				
 		return vb;
 	}
 	
 	private TableView<OrderItem> createOrderItemTable() {
 		TableView<OrderItem> table = new TableView<>();
-		TableColumn<OrderItem, Number> orderId = new TableColumn<>("Order ID");
-		orderId.setCellValueFactory(new PropertyValueFactory<>("orderId"));
+		TableColumn<OrderItem, Number> orderItemId = new TableColumn<>("Order Item ID");
+		orderItemId.setCellValueFactory(new PropertyValueFactory<>("orderItemId"));
 
-		TableColumn<OrderItem, Number> orderUserId = new TableColumn<>("User ID");
-		orderUserId.setCellValueFactory(new PropertyValueFactory<>("orderUserId"));
+		TableColumn<OrderItem, Number> menuItemId = new TableColumn<>("Menu Item ID");
+		menuItemId.setCellValueFactory(new PropertyValueFactory<>("menuItemId"));
 
-		TableColumn<OrderItem, String> orderStatus = new TableColumn<>("Status");
-		orderStatus.setCellValueFactory(new PropertyValueFactory<>("orderStatus"));
+		TableColumn<OrderItem, String> quantity = new TableColumn<>("Quantity");
+		quantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
 
-		TableColumn<OrderItem, String> orderDate = new TableColumn<>("Date");
-		orderDate.setCellValueFactory(new PropertyValueFactory<>("orderDate"));
-		
-		TableColumn<OrderItem, Number> orderTotal = new TableColumn<>("Total");
-		orderTotal.setCellValueFactory(new PropertyValueFactory<>("orderTotal"));
-
-		table.getColumns().add(orderId);
-		table.getColumns().add(orderUserId);
-		table.getColumns().add(orderStatus);
-		table.getColumns().add(orderDate);
-		table.getColumns().add(orderTotal);
-
-		return table;
-	}
-	
-	private TableView<MenuItem> createMenuItemTable() {
-		TableView<MenuItem> table = new TableView<>();
-		TableColumn<MenuItem, String> menuItemName = new TableColumn<>("Menu Item Name");
-		menuItemName.setCellValueFactory(new PropertyValueFactory<>("menuItemName"));
-
-		TableColumn<MenuItem, String> menuItemDescription = new TableColumn<>("Description");
-		menuItemDescription.setCellValueFactory(new PropertyValueFactory<>("menuItemDescription"));
-		
-		TableColumn<MenuItem, Number> menuItemPrice = new TableColumn<>("Total");
-		menuItemPrice.setCellValueFactory(new PropertyValueFactory<>("menuItemPrice"));
-
-		table.getColumns().add(menuItemName);
-		table.getColumns().add(menuItemDescription);
-		table.getColumns().add(menuItemPrice);
+		table.getColumns().add(orderItemId);
+		table.getColumns().add(menuItemId);
+		table.getColumns().add(quantity);
 
 		return table;
 	}
@@ -129,6 +94,7 @@ public class ViewOrderDetails extends VBox{
 		form.add(amount, 1, 0);
 		form.add(new Label("Payment Date:"), 0, 1);
 		form.add(date, 1, 1);
+		date.setDisable(true);
 		form.add(new Label("Payment Type:"), 0, 2);
 		form.add(type, 1, 2);
 		form.add(proceedBtn, 0, 3);
@@ -136,4 +102,73 @@ public class ViewOrderDetails extends VBox{
 
 		return form;
 	}
+
+	public Button getProceedBtn() {
+		return proceedBtn;
+	}
+
+	public Button getBackBtn() {
+		return backBtn;
+	}
+
+	public TableView<OrderItem> getTable() {
+		return table;
+	}
+	
+	public TextField getAmount() {
+		return amount;
+	}
+
+	public TextField getDate() {
+		return date;
+	}
+
+	public TextField getType() {
+		return type;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
+
+	public int getOrderUserId() {
+		return orderUserId;
+	}
+
+	public void setOrderUserId(int orderUserId) {
+		this.orderUserId = orderUserId;
+	}
+
+	public int getOrderTotal() {
+		return orderTotal;
+	}
+
+	public void setOrderTotal(int orderTotal) {
+		this.orderTotal = orderTotal;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public Date getOrderDate() {
+		return orderDate;
+	}
+
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
+	}
+
+	public VBox getVb() {
+		return vb;
+	}
+	
 }

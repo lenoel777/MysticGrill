@@ -25,7 +25,7 @@ public class ViewOrderController {
 	private void goToDetails() {
 		if(!isEmpty) {
 			ViewOrderDetails vod = new ViewOrderDetails(selectedUserId);
-//			ViewOrderDetailsController vodc = new ViewOrderDetailsController(vod);
+			ViewOrderDetailsController vodc = new ViewOrderDetailsController(vod);
 		}
 		
 	}

@@ -25,7 +25,7 @@ public class ViewOrder extends VBox{
 	TextField orderDate = new TextField();
 	TextField orderTotal = new TextField();
 	
-	public ViewOrder(Stage primaryStage) {
+	public ViewOrder() {
 		vd = new Button("View Detail");
         table = createOrderTable();
 
@@ -38,10 +38,7 @@ public class ViewOrder extends VBox{
         this.getChildren().addAll(titleBox, table, form);
 
         Scene viewOrderScene = new Scene(this, 800, 600);
-        Main.getSceneStack().add(viewOrderScene);
-        primaryStage.setScene(viewOrderScene);
-        primaryStage.setTitle("View Order Page");
-        primaryStage.show();
+        Main.nextScene(viewOrderScene);
 	}
 	
 	private TableView<Order> createOrderTable() {

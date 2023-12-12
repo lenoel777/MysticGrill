@@ -22,6 +22,7 @@ public class Main extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		stage = primaryStage;
 		stage.setTitle("Mystic Grill");
+		stage.show();
 		
 //		ViewOrder vo = new ViewOrder();
 //		root.getChildren().add(vo);
@@ -36,23 +37,29 @@ public class Main extends Application{
 //        primaryStage.setScene(scene);
 //        primaryStage.show();
 		
-		ViewOrder vo = new ViewOrder(stage);
+		ViewOrder vo = new ViewOrder();
 		ViewOrderController voc = new ViewOrderController(vo);
     }
 
-	public static void changeScene(Scene newScene) {
-		if (stage != null) {
-			sceneStack.push(newScene);
-            stage.setScene(newScene);
-        }
+	public static void nextScene(Scene newScene) {
+		sceneStack.push(newScene);
+        stage.setScene(newScene);
+	}
+	
+	//dengan load lagi
+	public static void previousScene(Scene newScene) {
+		sceneStack.pop();
+		sceneStack.pop();
+		sceneStack.push(newScene);
+		stage.setScene(newScene);
 	}
 	
     public static void goToPreviousPage() {
+    	//tanpa load lagi
         if (!sceneStack.isEmpty()) {
             sceneStack.pop(); // Buang scene saat ini
             if (!sceneStack.isEmpty()) {
-                Scene previousScene = sceneStack.peek(); // Ambil scene sebelumnya
-                stage.setScene(previousScene); // Tampilkan scene sebelumnya
+                stage.setScene(sceneStack.peek()); // Tampilkan scene sebelumnya
             }
         }
     }

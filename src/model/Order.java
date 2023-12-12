@@ -12,6 +12,7 @@ public class Order {
 	private int orderId, orderUserId, orderTotal;
 	private String orderStatus;
 	private Date orderDate;
+	private static ArrayList<Order> orders = new ArrayList<>();
 	
 	public Order(int orderId, int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
 		super();
@@ -23,7 +24,6 @@ public class Order {
 	}
 	
 	public static ArrayList<Order> loadOrders() {
-		ArrayList<Order> orders = new ArrayList<>();
 		String query = "SELECT * FROM `order`";
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
@@ -82,22 +82,25 @@ public class Order {
 //		}
 //	}
 	
-	public static ResultSet getOrderById(int ids) {
-		String query = "SELECT * FROM `order` WHERE orderId = ?";
-		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
-		
-		try {
-			ps.setInt(1, ids);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		ResultSet rs = Connect.getConnection().executeQuery(query);
-		return rs;
-	}
-
+//	public static ResultSet getOrderById(int ids) {
+//		ResultSet rs = null;
+//		String query = "SELECT * FROM `order` WHERE orderId = ?";
+//		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
+//		
+//		try {
+//			ps.setInt(1, ids);
+//			ps.execute();
+//			rs = ps.getResultSet();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println("tes");
+//		
+//		return rs;
+//	}
+	
 	public int getOrderId() {
 		return orderId;
 	}
@@ -136,6 +139,10 @@ public class Order {
 
 	public void setOrderDate(Date orderDate) {
 		this.orderDate = orderDate;
+	}
+
+	public static ArrayList<Order> getOrders() {
+		return orders;
 	}
 	
 }
