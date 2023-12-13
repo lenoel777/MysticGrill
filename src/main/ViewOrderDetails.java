@@ -1,8 +1,6 @@
 package main;
 
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,9 +14,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import model.MenuItem;
-import model.Order;
 import model.OrderItem;
 
 public class ViewOrderDetails extends VBox{

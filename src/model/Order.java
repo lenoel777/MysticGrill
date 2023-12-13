@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,6 +24,27 @@ public class Order {
 	
 	public static ArrayList<Order> loadOrders() {
 		String query = "SELECT * FROM `order`";
+		ResultSet rs = Connect.getConnection().executeQuery(query);
+		try {
+			while (rs.next()) {
+				int id = rs.getInt(1);
+				int userId = rs.getInt(2);
+				String status = rs.getString(3);
+				Date date = rs.getDate(4);
+				int total = rs.getInt(5);
+
+				orders.add(new Order(id, userId, status, date, total));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return orders;
+	}
+	
+	public static ArrayList<Order> loadOrdersByStatus(String st) {
+		String query = "SELECT * FROM `order` WHERE orderStatus = '" + st + "'";
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
 			while (rs.next()) {
