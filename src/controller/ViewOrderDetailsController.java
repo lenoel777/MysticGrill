@@ -57,7 +57,7 @@ public class ViewOrderDetailsController {
 	
 	private void loadTableData() {
 		orderItems.clear();
-		orderItems.addAll(OrderItem.loadOrderItems());
+		orderItems.addAll(OrderItem.loadOrderItems(vod.getOrderId()));
 		if (orderItems != null && !orderItems.isEmpty()) {
 		    vod.getTable().setItems(orderItems);
 		} else {

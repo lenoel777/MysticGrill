@@ -18,9 +18,9 @@ public class OrderItem {
 		this.quantity = quantity;
 	}
 	
-	public static ArrayList<OrderItem> loadOrderItems() {
+	public static ArrayList<OrderItem> loadOrderItems(int ids) {
 		ArrayList<OrderItem> orderItems = new ArrayList<>();
-		String query = "SELECT * FROM orderitem";
+		String query = "SELECT * FROM orderitem WHERE orderId = " + ids;
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
 			while (rs.next()) {
