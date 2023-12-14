@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,12 +39,25 @@ public class OrderItem {
 		return orderItems;
 	}
 
-	public static void insertOrderItem(int menuItemId, int quantity) {
+	public static void insertOrderItem(int orderId, int menuItemId, int quantity) {
 		String query = String.format(
-				"INSERT INTO orderitem (menuItemId, quantity) VALUES (%d, %d)", 
-				menuItemId, quantity);
+				"INSERT INTO orderitem (orderId, menuItemId, quantity) VALUES (%d, %d, %d)",
+                orderId, menuItemId, quantity);
 		Connect.getConnection().executeUpdate(query);
 	}
+	
+    public static void updateOrderItem(int orderItemId, int menuItemId, int quantity) {
+        String query = "UPDATE orderitem SET menuItemId = ?, quantity = ? WHERE orderItemId = ?";
+
+        try (PreparedStatement ps = Connect.getConnection().prepareStatement(query)) {
+            ps.setInt(1, menuItemId);
+            ps.setInt(2, quantity);
+            ps.setInt(3, orderItemId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 //	public static void deleteOrderItem(int id) {
 //		String query = "DELETE FROM orderitem WHERE orderItemId = ?";

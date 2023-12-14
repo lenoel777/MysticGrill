@@ -1,60 +1,65 @@
 package view;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import view.Home;
 import database.Connect;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import model.User;
+import Controller.LoginControl;
 
-public class Login extends Application {
+public class Login extends VBox {
 
     private TextField username;
-    private TextField uPassword;
-    private Button tmblLogin;
-    private Button tmblRegister; // Tombol Register baru
+    private PasswordField password;
+    private Button loginButton;
+    private Hyperlink registerLink;
     private Connect connection;
+    private User user;
 
     public Login(Connect connection) {
-        this.connection = connection.getConnection();
+        this.connection = connection;
+        initialize();
+        attachEventHandlers();
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-
+    private void initialize() {
         username = new TextField();
         username.setPromptText("Username");
 
-        uPassword = new TextField();
-        uPassword.setPromptText("Password");
+        password = new PasswordField();
+        password.setPromptText("Password");
 
-        tmblLogin = new Button("Login");
-        tmblLogin.setOnAction(e -> loginAction(primaryStage));
+        loginButton = new Button("Login");
 
-        tmblRegister = new Button("Register"); // Tombol Register
-        tmblRegister.setOnAction(e -> moveToRegisterPage(primaryStage));
+        registerLink = new Hyperlink("Don't Have an Account Yet? Register Here");
 
-        HBox titleBox = new HBox(); // HBox untuk menempatkan judul di tengah
+        HBox titleBox = new HBox();
         titleBox.getChildren().add(titleLabel());
         titleBox.setAlignment(Pos.CENTER);
 
-        VBox vbox = new VBox(5);
-        vbox.getChildren().addAll(titleBox, createLayout(username, uPassword, tmblLogin, tmblRegister));
+        this.getChildren().addAll(titleBox, createLayout(username, password, loginButton, registerLink));
+        this.setAlignment(Pos.CENTER);
+    }
 
-        Scene loginScene = new Scene(vbox, 300, 200);
-        primaryStage.setScene(loginScene);
-        primaryStage.setTitle("Login Page");
-        primaryStage.show();
+    public TextField getUsername() {
+        return username;
+    }
+
+    public PasswordField getPassword() {
+        return password;
+    }
+
+    public Button getLoginButton() {
+        return loginButton;
+    }
+
+    public Hyperlink getRegisterLink() {
+        return registerLink;
     }
 
     private Label titleLabel() {
@@ -64,57 +69,21 @@ public class Login extends Application {
         return title;
     }
 
-    private void loginAction(Stage primaryStage) {
-        String enterUsername = username.getText();
-        String enterPassword = uPassword.getText();
-
-        if (isValidationLogin(enterUsername, enterPassword)) {
-//            primaryStage.setScene(Home.createScene());
-        } else {
-            showAlert("LOGIN FAILED", "Username & Password Not Found. Please Register");
-        }
-    }
-
-    private Boolean isValidationLogin(String enterUsername, String enterPassword) {
-        String qry = "SELECT * FROM user WHERE userName = ? AND userPassword = ?";
-        
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(qry);
-            preparedStatement.setString(1, enterUsername);
-            preparedStatement.setString(2, enterPassword);
-
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            // Menggunakan resultSet.next() untuk mengecek apakah ada hasil dari query
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void moveToRegisterPage(Stage primaryStage) {
-        Register registerPage = new Register();
-        try {
-            registerPage.start(primaryStage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static VBox createLayout(TextField username, TextField uPassword, Button tmblLogin, Button tmblRegister) {
+    private static VBox createLayout(TextField username, PasswordField password, Button loginButton, Hyperlink registerLink) {
         VBox layout = new VBox(10);
         layout.setPadding(new Insets(10));
         layout.setAlignment(Pos.CENTER);
-        layout.getChildren().addAll(username, uPassword, tmblLogin, tmblRegister);
+        layout.getChildren().addAll(username, password, loginButton, registerLink);
         return layout;
     }
+
+    private void attachEventHandlers() {
+        LoginControl loginControl = new LoginControl(this, connection);
+        loginButton.setOnAction(e -> loginControl.loginAction());
+        registerLink.setOnAction(e -> loginControl.moveToRegisterPage());
+    }
+    public Scene createScene() {
+    	return new Scene(this, 400,400);
+    }
+
 }

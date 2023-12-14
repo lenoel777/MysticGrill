@@ -79,6 +79,38 @@ public class User {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void updateUserRole(String role, int id) {
+		String query = "UPDATE user SET userRole = ? WHERE userId = ?";
+
+		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
+
+		try {
+			ps.setString(1, role);
+			ps.setInt(2, id);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean validateLogin(Connect connection, String enterUserName, String enterPassword) {
+	      String qry = "SELECT * FROM user WHERE userName = ? AND userPassword = ?";
+
+	      try {
+	          PreparedStatement preparedStatement = connection.prepareStatement(qry);
+	          preparedStatement.setString(1, enterUserName);
+	          preparedStatement.setString(2, enterPassword);
+
+	          ResultSet resultSet = preparedStatement.executeQuery();
+
+	          return resultSet.next();
+	      } catch (SQLException e) {
+	          e.printStackTrace();
+	          return false;
+	      }
+		}
 
 	public int getUserId() {
 		return userId;

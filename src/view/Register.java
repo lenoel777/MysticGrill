@@ -1,66 +1,56 @@
 package view;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import database.Connect;
-import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 import model.User;
+import Controller.Register_Control;
 
-public class Register extends Application {
+public class Register extends VBox {
 
     private TextField name;
-    private TextField tfemail;
-    private TextField password;
-    private TextField confirm;
-    private Button tmblRegis;
+    private TextField email;
+    private PasswordField password;
+    private PasswordField confirm;
+    private Button registerButton;
     private Label lbl;
+    private Connect connection;
+    private User user;
+    private Register_Control registerControl;
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    public Register(Connect connection) {
+        this.connection = connection;
+        initialize();
+    }
+
+    private void initialize() {
         name = new TextField();
         name.setPromptText("Name");
 
-        tfemail = new TextField();
-        tfemail.setPromptText("Email");
+        email = new TextField();
+        email.setPromptText("Email");
 
-        password = new TextField();
+        password = new PasswordField();
         password.setPromptText("Password");
 
-        confirm = new TextField();
+        confirm = new PasswordField();
         confirm.setPromptText("Confirm Password");
 
-        tmblRegis = new Button("Register");
-        tmblRegis.setOnAction(e -> {
-			try {
-				registerAction(primaryStage);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
+        registerButton = new Button("Register");
+        registerButton.setOnAction(e -> registerControl.registerAction());
 
         lbl = new Label();
         lbl.setPadding(new Insets(10));
 
-        VBox vbox = new VBox(5);
-        vbox.setPadding(new Insets(10));
-        vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(titleLabel(), name, tfemail, password, confirm, tmblRegis, lbl);
+        this.getChildren().addAll(titleLabel(), name, email, password, confirm, registerButton, lbl);
+        this.setPadding(new Insets(10));
+        this.setAlignment(Pos.CENTER);
 
-        Scene scene = new Scene(vbox, 300, 400);
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Registration Page");
-        primaryStage.show();
+         
     }
 
     private Label titleLabel() {
@@ -69,80 +59,35 @@ public class Register extends Application {
         title.setPadding(new Insets(10, 0, 0, 0));
         return title;
     }
-
-    private void registerAction(Stage primaryStage) throws Exception {
-        String nama = name.getText();
-        String email = tfemail.getText();
-        String pass = password.getText();
-        String validate = confirm.getText();
-
-        if (nama.isEmpty() || email.isEmpty() || pass.isEmpty() || validate.isEmpty()) {
-            lbl.setText("Please fill in all fields.");
-        } else if (!pass.equals(validate)) {
-            lbl.setText("Passwords do not match. Please make sure your passwords match.");
-        } else if (!isValidMail(email)) {
-            lbl.setText("Invalid email format. Please use a valid email address.");
-        } else if (pass.length() < 6) {
-            lbl.setText("Password should be at least 6 characters long.");
-        } else {
-        	
-        	//Kondisi pas berhasil login
-        	if(registerUser(nama, email, pass)) {
-        		
-                lbl.setText("Registration Successful");
-//                MoveToLoginPage(primaryStage);
-                
-        	}else {
-        		lbl.setText("EROR TO REGISTER USER. Please Try Again");
-        	}
-        	
-        }
-    }
     
-    private boolean registerUser(String name, String email, String password) throws Exception {
-//        try (Connect connect = Connect.getConnection()) {
-//            String sql = "INSERT INTO user (userName, userEmail, userPassword, userRole) VALUES (?, ?, ?, ?)";
-//            try (PreparedStatement prepared = connect.prepareStatement(sql)) {
-//                prepared.setString(1, name);
-//                prepared.setString(2, email);
-//                prepared.setString(3, password);
-//                prepared.setString(4, "Customer");
-//
-//                int rowsAffected = prepared.executeUpdate();
-//
-//                return rowsAffected > 0;
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//                return false;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-        
-        try {
-			User.insertUser(name, email, password);
-			User.loadUsers();
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-            return false;
-		}
-        
+    public Scene createScene() {
+    	return new Scene(this, 400, 400);
     }
 
-    
-//    private void MoveToLoginPage(Stage primaryStage) {
-//        Login login = new Login(Connect.getConnection()); // Mengirimkan koneksi ke konstruktor Login
-//
-//        try {
-//            login.start(primaryStage);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    public TextField getName() {
+        return name;
+    }
 
-    private boolean isValidMail(String email) {
-        return email.matches("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+    public TextField getEmail() {
+        return email;
+    }
+
+    public PasswordField getPassword() {
+        return password;
+    }
+
+    public PasswordField getConfirm() {
+        return confirm;
+    }
+
+    public Button getRegisterButton() {
+        return registerButton;
+    }
+
+    public Label getLbl() {
+        return lbl;
+    }
+    public Register_Control getRegisterControl() {
+        return registerControl;
     }
 }

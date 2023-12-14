@@ -10,13 +10,13 @@ public class MenuItem {
 	private int menuItemId, menuItemPrice;
 	private String menuItemName, menuItemDescription;
 	
-	public MenuItem(int menuItemId, String menuItemName, String menuItemDescription, int menuItemPrice) {
-		super();
-		this.menuItemId = menuItemId;
-		this.menuItemName = menuItemName;
-		this.menuItemDescription = menuItemDescription;
-		this.menuItemPrice = menuItemPrice;
-	}
+	// Constructor to create MenuItem from ResultSet
+    public MenuItem(ResultSet rs) throws SQLException {
+        this.menuItemId = rs.getInt("menuItemId");
+        this.menuItemName = rs.getString("menuItemName");
+        this.menuItemDescription = rs.getString("menuItemDescription");
+        this.menuItemPrice = rs.getInt("menuItemPrice");
+    }
 	
 	public static ArrayList<MenuItem> loadMenuItems() {
 		ArrayList<MenuItem> menuItems = new ArrayList<>();
@@ -24,12 +24,7 @@ public class MenuItem {
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
 			while (rs.next()) {
-				int id = rs.getInt(1);
-				String itemName = rs.getString(2);
-				String itemDescription = rs.getString(3);
-				int itemPrice = rs.getInt(4);
-
-				menuItems.add(new MenuItem(id, itemName, itemDescription, itemPrice));
+				menuItems.add(new MenuItem(rs));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

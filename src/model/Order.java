@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -64,12 +65,33 @@ public class Order {
 		return orders;
 	}
 
-	public static void insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
-		String query = String.format(
-				"INSERT INTO `order` (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)", 
-				orderUserId, orderStatus, orderDate, orderTotal);
-		Connect.getConnection().executeUpdate(query);
-	}
+//	public static void insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
+//		String query = String.format(
+//				"INSERT INTO `order` (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)", 
+//				orderUserId, orderStatus, orderDate, orderTotal);
+//		Connect.getConnection().executeUpdate(query);
+//	}
+	
+    public static int insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
+        String query = String.format(
+                "INSERT INTO orders (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)",
+                orderUserId, orderStatus, orderDate, orderTotal);
+
+        // Use PreparedStatement to get generated keys
+        try (PreparedStatement ps = Connect.getConnection().prepareStatement(query)) {
+            ps.executeUpdate();
+
+            // Retrieve generated keys
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1); // Return the generated order ID
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1; // Return -1 if insertion fails
+    }
 
 //	public static void deleteOrder(int id) {
 //		String query = "DELETE FROM order WHERE orderId = ?";
