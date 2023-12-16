@@ -43,6 +43,27 @@ public class Order {
 
 		return orders;
 	}
+	
+	public static ArrayList<Order> loadPendingOrders() {
+	    ArrayList<Order> pendingOrders = new ArrayList<>();
+	    String query = "SELECT * FROM `order` WHERE orderStatus = 'Pending'";
+	    try {
+	        ResultSet rs = Connect.getConnection().executeQuery(query);
+	        while (rs.next()) {
+	            int id = rs.getInt(1);
+	            int userId = rs.getInt(2);
+	            String status = rs.getString(3);
+	            Date date = rs.getDate(4);
+	            int total = rs.getInt(5);
+
+	            pendingOrders.add(new Order(id, userId, status, date, total));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return pendingOrders;
+	}
 
 	public static void insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
 		String query = String.format(
