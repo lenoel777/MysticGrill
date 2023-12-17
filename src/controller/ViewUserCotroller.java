@@ -13,7 +13,8 @@ public class ViewUserCotroller {
 	public ViewUserCotroller(ViewUser view) {
 		// TODO Auto-generated constructor stub
 		this.viewUser = view;
-		
+
+		loadTableData();
 		setupTableSelectionListener();
 		setButtonListener();
 	}
