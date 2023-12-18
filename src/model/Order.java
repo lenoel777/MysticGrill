@@ -44,54 +44,54 @@ public class Order {
 		return orders;
 	}
 	
-	public static ArrayList<Order> loadOrdersByStatus(String st) {
-		String query = "SELECT * FROM `order` WHERE orderStatus = '" + st + "'";
-		ResultSet rs = Connect.getConnection().executeQuery(query);
-		try {
-			while (rs.next()) {
-				int id = rs.getInt(1);
-				int userId = rs.getInt(2);
-				String status = rs.getString(3);
-				Date date = rs.getDate(4);
-				int total = rs.getInt(5);
+	public static ArrayList<Order> loadPendingOrders() {
+	    ArrayList<Order> pendingOrders = new ArrayList<>();
+	    String query = "SELECT * FROM `order` WHERE orderStatus = 'Pending'";
+	    try {
+	        ResultSet rs = Connect.getConnection().executeQuery(query);
+	        while (rs.next()) {
+	            int id = rs.getInt(1);
+	            int userId = rs.getInt(2);
+	            String status = rs.getString(3);
+	            Date date = rs.getDate(4);
+	            int total = rs.getInt(5);
 
-				orders.add(new Order(id, userId, status, date, total));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	            pendingOrders.add(new Order(id, userId, status, date, total));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 
-		return orders;
+	    return pendingOrders;
+	}
+	
+	public static ArrayList<Order> loadPreparedOrders() {
+	    ArrayList<Order> pendingOrders = new ArrayList<>();
+	    String query = "SELECT * FROM `order` WHERE orderStatus = 'Prepared'";
+	    try {
+	        ResultSet rs = Connect.getConnection().executeQuery(query);
+	        while (rs.next()) {
+	            int id = rs.getInt(1);
+	            int userId = rs.getInt(2);
+	            String status = rs.getString(3);
+	            Date date = rs.getDate(4);
+	            int total = rs.getInt(5);
+
+	            pendingOrders.add(new Order(id, userId, status, date, total));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    return pendingOrders;
 	}
 
-//	public static void insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
-//		String query = String.format(
-//				"INSERT INTO `order` (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)", 
-//				orderUserId, orderStatus, orderDate, orderTotal);
-//		Connect.getConnection().executeUpdate(query);
-//	}
-	
-    public static int insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
-        String query = String.format(
-                "INSERT INTO orders (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)",
-                orderUserId, orderStatus, orderDate, orderTotal);
-
-        // Use PreparedStatement to get generated keys
-        try (PreparedStatement ps = Connect.getConnection().prepareStatement(query)) {
-            ps.executeUpdate();
-
-            // Retrieve generated keys
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                return generatedKeys.getInt(1); // Return the generated order ID
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return -1; // Return -1 if insertion fails
-    }
+	public static void insertOrder(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
+		String query = String.format(
+				"INSERT INTO `order` (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)", 
+				orderUserId, orderStatus, orderDate, orderTotal);
+		Connect.getConnection().executeUpdate(query);
+	}
 
 //	public static void deleteOrder(int id) {
 //		String query = "DELETE FROM order WHERE orderId = ?";

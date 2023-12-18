@@ -2,6 +2,8 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Scene;
+import main.Main;
 import main.ViewOrder;
 import main.ViewOrderDetails;
 import model.Order;
@@ -25,6 +27,7 @@ public class ViewOrderController {
 			ViewOrderDetails vod = new ViewOrderDetails(selectedUserId);
 			ViewOrderDetailsController vodc = new ViewOrderDetailsController(vod);
 		}
+		
 	}
 	
 	private void setupTableSelectionListener() {
@@ -45,7 +48,7 @@ public class ViewOrderController {
 
 	private void loadTableData() {
 		orders.clear();
-		orders.addAll(Order.loadOrdersByStatus("Served"));
+		orders.addAll(Order.loadOrders());
 		if (orders != null && !orders.isEmpty()) {
 		    viewOrder.getTable().setItems(orders);
 		} else {
