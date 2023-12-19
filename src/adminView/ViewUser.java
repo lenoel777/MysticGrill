@@ -27,7 +27,8 @@ public class ViewUser extends VBox{
 	
 	public ViewUser() {
 		table = UserTable();
-		// TODO Auto-generated constructor stub
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
 		HBox titleBox = new HBox();
         titleBox.getChildren().add(new Label("User List"));
         titleBox.setAlignment(Pos.CENTER);

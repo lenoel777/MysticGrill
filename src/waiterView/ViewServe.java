@@ -36,6 +36,7 @@ public class ViewServe extends VBox {
     	del = new Button ("Delete");
     	
         table = createOrderTable();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         HBox titleBox = new HBox();
         titleBox.getChildren().add(new Label("View Prepared"));

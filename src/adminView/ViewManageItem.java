@@ -22,6 +22,7 @@ public class ViewManageItem extends VBox{
 	
 	public ViewManageItem() {
 		table = setTable();
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         addButton = new Button("Add");
         deleteButton = new Button("Delete");

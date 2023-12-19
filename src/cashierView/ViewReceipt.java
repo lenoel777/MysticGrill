@@ -30,6 +30,7 @@ public class ViewReceipt extends VBox{
 	public ViewReceipt() {
 		rd = new Button("View Detail");
         table = ReceiptTable();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         
         HBox titleBox = new HBox();
         titleBox.getChildren().add(new Label("Receipt List"));

@@ -46,6 +46,7 @@ public class ViewReceiptDetails extends VBox{
         VBox info = createReceiptInfo();
         
         table = createOrderItemTable();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         HBox data = new HBox();
         data.getChildren().addAll(table);
         data.setPrefHeight(300);

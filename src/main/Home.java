@@ -15,12 +15,10 @@ import customerController.OrderedMenuItemController;
 import customerView.ViewMenuItem;
 import customerView.ViewOrderedMenuItem;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import model.User;
@@ -35,7 +33,7 @@ public class Home extends VBox {
         BorderPane layout = new BorderPane();
 
         // pesan selamat datang di tengah menuBar
-        Label welcomeLabel = new Label("WELCOME TO MYSTIC GRILL\nSilahkan pesan makan yang Anda mau");
+        Label welcomeLabel = new Label("HELLO, " + User.getCurrUser().getUserName() +"\nWELCOME TO MYSTIC GRILL\nSilahkan pesan makan yang Anda mau");
         welcomeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         VBox welcomeBox = new VBox(welcomeLabel);
         welcomeBox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -190,7 +188,7 @@ public class Home extends VBox {
 
         layout.setCenter(content);
 
-        scene = new Scene(layout, 800, 600);
+        scene = new Scene(layout, 1000, 600);
         Main.setSceneTo(scene);
     }
 }

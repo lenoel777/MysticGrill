@@ -4,9 +4,7 @@ import cashierView.ViewOrder;
 import cashierView.ViewOrderDetails;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
 import main.Home;
-import main.Main;
 import model.Order;
 
 public class ViewOrderController {
@@ -58,35 +56,4 @@ public class ViewOrderController {
 	public ObservableList<Order> getOrders() {
 		return orders;
 	}
-	
-	
-	
-//	void handleInsert() {
-//		String name = viewOrder.getNameInput().getText();
-//		int price = Integer.parseInt(viewOrder.getPriceInput().getText());
-//		int quantity = Integer.parseInt(viewOrder.getQuantityInput().getText());
-//		for (Order order : orders) {
-//			if (name.equals(order.getProductName())) {
-//				System.out.println("Name is not unique");
-//				return;
-//			}
-//		}
-//		Order.insertProduct(name, price, quantity);
-//		loadTableData();
-//	}
-//	
-//	void handleDelete() {
-//		int id = Integer.valueOf(viewOrder.getIdInput().getText());
-//		Order.deleteProduct(id);
-//		loadTableData();
-//	}
-//
-//	void handleUpdate() {
-//		int id = Integer.valueOf(viewOrder.getIdInput().getText());
-//		String name = viewOrder.getNameInput().getText();
-//		int price = Integer.parseInt(viewOrder.getPriceInput().getText());
-//		int quantity = Integer.parseInt(viewOrder.getQuantityInput().getText());
-//		Order.updateProduct(id, name, price, quantity);
-//		loadTableData();
-//	}
 }

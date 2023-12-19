@@ -22,8 +22,6 @@ import model.OrderItem;
 import model.Receipt;
 
 public class ViewOrderDetailsController {
-//	private static ViewOrderDetailsController instance;
-	
 	ViewOrderDetails vod;
 	private static ObservableList<OrderItem> orderItems = FXCollections.observableArrayList();
 	int amount; String type;
@@ -38,13 +36,6 @@ public class ViewOrderDetailsController {
 		loadTableData();
 		buttonOnClick();
 	}
-	
-//	public static ViewOrderDetailsController getInstance(ViewOrderDetails view){
-//		if(instance==null) {
-//			instance = new ViewOrderDetailsController(view);
-//		}
-//		return instance;
-//	}
 	
 	private void loadOrderInfo() {
 		for(Order order: Order.getOrders()) {
@@ -100,6 +91,9 @@ public class ViewOrderDetailsController {
 	private boolean checkData() {
 		if(vod.getOrderStatus().equals("Paid")) {
 			showAlert("Error", "Order has been paid");
+			return false;
+		}else if(!vod.getOrderStatus().equals("Served")) {
+			showAlert("Error", "Order has to be Served first!");
 			return false;
 		}else if(vod.getAmount().getText().isEmpty() || vod.getDate().getText().isEmpty() || vod.getType().getText().toString().isEmpty()) {
 			showAlert("Error", "All fields must be filled");

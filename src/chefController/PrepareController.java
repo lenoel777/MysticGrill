@@ -7,6 +7,7 @@ import chefView.ViewPrepare;
 import database.Connect;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import model.Order;
 
 public class PrepareController {
@@ -35,7 +36,7 @@ public class PrepareController {
 	            updateOrderStatusToPrepared(selectedOrderId);
 	            loadTableData();
 	        } else {
-	        	System.err.println("Failed to update order status.");
+	        	showAlert("Failed to update order status.");
 	        }
 	    });
 		
@@ -49,7 +50,7 @@ public class PrepareController {
 	            deleteUserOrder(selectedOrderId);
 	            loadTableData();
 	        } else {
-	        	System.err.println("Failed to update order status.");
+	        	showAlert("Failed to update order status.");
 	        }
 	    });
 		
@@ -67,7 +68,7 @@ public class PrepareController {
 	            updateUserOrder(selectedOrderId, userId, status, date);
 	            loadTableData();
 	        } else {
-	            System.err.println("Failed to update order.");
+	        	showAlert("Failed to update order.");
 	        }
 	    });
 	}
@@ -92,8 +93,6 @@ public class PrepareController {
 		orders.addAll(Order.loadPendingOrders());
 		if (orders != null && !orders.isEmpty()) {
 		    viewPending.getTable().setItems(orders);
-		} else {
-		    System.out.println("Orders list is null or empty");
 		}
 	}
 	
@@ -105,13 +104,13 @@ public class PrepareController {
 
             int rowsAffected = statement.executeUpdate();
             if (rowsAffected > 0) {
-                System.out.println("Order status updated to 'Prepared'!");
+            	showAlert("Order status updated to 'Prepared'!");
             } else {
-                System.out.println("Order not found or status not updated.");
+            	showAlert("Order not found or status not updated.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Failed to update order status.");
+            showAlert("Failed to update order status.");
         }
     }
 	
@@ -129,14 +128,14 @@ public class PrepareController {
 	        int rowsAffected = statement.executeUpdate();
 
 	        if (rowsAffected > 0) {
-	            System.out.println("Order deleted from the database!");
+	        	showAlert("Order deleted from the database!");
 	        } else {
-	            System.out.println("Order with ID " + orderId + " not found in the database.");
+	        	showAlert("Order with ID " + orderId + " not found in the database.");
 	        }
 
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        System.err.println("Failed to delete menu item from the database.");
+	        showAlert("Failed to delete menu item from the database.");
 	    }
 	}
 	
@@ -152,16 +151,22 @@ public class PrepareController {
 
 	        int rowsAffected = statement.executeUpdate();
 	        if (rowsAffected > 0) {
-	            System.out.println("Order updated successfully!");
+	        	showAlert("Order updated successfully!");
 	        } else {
-	            System.out.println("Order not found or not updated.");
+	        	showAlert("Order not found or not updated.");
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        System.err.println("Failed to update order.");
+	        showAlert("Failed to update order.");
 	    }
 	}
 	
-	
+	private void showAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Notification");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
 
 }

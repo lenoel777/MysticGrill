@@ -28,6 +28,7 @@ public class ViewOrder extends VBox{
 	public ViewOrder() {
 		vd = new Button("View Detail");
         table = createOrderTable();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
         HBox titleBox = new HBox();
         titleBox.getChildren().add(new Label("View Order"));

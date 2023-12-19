@@ -1,16 +1,14 @@
 package customerController;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import customerView.ViewOrderedMenuItem;
-import database.Connect;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableView;
 import model.Order;
 import model.OrderItem;
+import model.User;
 
 public class OrderedMenuItemController {
 	private ObservableList<OrderItem> data = FXCollections.observableArrayList();
@@ -58,10 +56,24 @@ public class OrderedMenuItemController {
     }
     
     private void loadTableData() {
+    	Order.loadOrders();
 		data.clear();
-		data.addAll(OrderItem.loadOrderItems());
+		data.addAll(getUsersOrderItems());
 		if (data != null && !data.isEmpty()) {
 		    view.getTable().setItems(data);
 		}
 	}
+    
+    private ArrayList<OrderItem> getUsersOrderItems(){
+    	ArrayList<OrderItem> orderItem = new ArrayList<OrderItem>();
+    	
+    	for(Order o: Order.getOrders()) {
+    		if(o.getOrderUserId() == User.getCurrUser().getUserId() && o.getOrderStatus().equals("Pending")) {
+    			for(OrderItem oi: OrderItem.loadOrderItems(o.getOrderId())) {
+    				orderItem.add(oi);
+    			}
+    		}
+    	}
+    	return orderItem;
+    }
 }

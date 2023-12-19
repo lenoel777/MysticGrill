@@ -49,6 +49,7 @@ public class ViewOrderDetails extends VBox{
         
         //table data
         table = createOrderItemTable();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         HBox data = new HBox();
         data.getChildren().addAll(table);
         
