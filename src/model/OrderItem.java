@@ -9,6 +9,7 @@ import database.Connect;
 
 public class OrderItem {
 	private int orderItemId, orderId, menuItemId, quantity;
+	private static ArrayList<OrderItem> orderItems = new ArrayList<>();
 
 	public OrderItem(int orderItemId, int orderId, int menuItemId, int quantity) {
 		super();
@@ -19,7 +20,7 @@ public class OrderItem {
 	}
 	
 	public static ArrayList<OrderItem> loadOrderItems(int ids) {
-		ArrayList<OrderItem> orderItems = new ArrayList<>();
+		orderItems.clear();
 		String query = "SELECT * FROM orderitem WHERE orderId = " + ids;
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
@@ -39,12 +40,26 @@ public class OrderItem {
 		return orderItems;
 	}
 
-	public static void insertOrderItem(int menuItemId, int quantity) {
-		String query = String.format(
-				"INSERT INTO orderitem (menuItemId, quantity) VALUES (%d, %d)", 
-				menuItemId, quantity);
-		Connect.getConnection().executeUpdate(query);
-	}
+    public static void insertOrderItem(int orderId, int menuItemId, int quantity) {
+        String query = String.format(
+                "INSERT INTO orderitem (orderId, menuItemId, quantity) VALUES (%d, %d, %d)",
+                orderId, menuItemId, quantity);
+
+        Connect.getConnection().executeUpdate(query);
+    }
+    
+    public static void updateOrderItem(int orderItemId, int menuItemId, int quantity) {
+        String query = "UPDATE orderitem SET menuItemId = ?, quantity = ? WHERE orderItemId = ?";
+
+        try (PreparedStatement ps = Connect.getConnection().prepareStatement(query)) {
+            ps.setInt(1, menuItemId);
+            ps.setInt(2, quantity);
+            ps.setInt(3, orderItemId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 //	public static void deleteOrderItem(int id) {
 //		String query = "DELETE FROM orderitem WHERE orderItemId = ?";

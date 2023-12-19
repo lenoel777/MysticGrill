@@ -71,6 +71,18 @@ public final class Connect {
 		return ps;
 	}
 	
+	public PreparedStatement prepareStatementGetKey(String query, int returnGeneratedKeys) {
+		Connection connection = con; // Replace getConnection() with your method to get the connection
+
+        try {
+			return connection.prepareStatement(query, java.sql.Statement.RETURN_GENERATED_KEYS);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+    }
+	
 	public void close() throws Exception {
 
 		if(con != null) {

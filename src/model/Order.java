@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import database.Connect;
@@ -24,6 +25,7 @@ public class Order {
 	}
 	
 	public static ArrayList<Order> loadOrders() {
+		orders.clear();
 		String query = "SELECT * FROM `order`";
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
@@ -45,6 +47,7 @@ public class Order {
 	}
 	
 	public static ArrayList<Order> loadPendingOrders() {
+		orders.clear();
 	    ArrayList<Order> pendingOrders = new ArrayList<>();
 	    String query = "SELECT * FROM `order` WHERE orderStatus = 'Pending'";
 	    try {
@@ -66,6 +69,7 @@ public class Order {
 	}
 	
 	public static ArrayList<Order> loadPreparedOrders() {
+		orders.clear();
 	    ArrayList<Order> pendingOrders = new ArrayList<>();
 	    String query = "SELECT * FROM `order` WHERE orderStatus = 'Prepared'";
 	    try {
@@ -92,6 +96,27 @@ public class Order {
 				orderUserId, orderStatus, orderDate, orderTotal);
 		Connect.getConnection().executeUpdate(query);
 	}
+	
+	public static int insertOrderAndGetID(int orderUserId, String orderStatus, Date orderDate, int orderTotal) {
+        String query = String.format(
+                "INSERT INTO `order` (orderUserId, orderStatus, orderDate, orderTotal) VALUES (%d, '%s', '%s', %d)",
+                orderUserId, orderStatus, orderDate, orderTotal);
+
+        // Use PreparedStatement to get generated keys
+        try (PreparedStatement ps = Connect.getConnection().prepareStatementGetKey(query, Statement.RETURN_GENERATED_KEYS)) {
+        	ps.executeUpdate();
+
+            // Retrieve generated keys
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt(1); // Return the generated order ID
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1; // Return -1 if insertion fails
+    }
 
 //	public static void deleteOrder(int id) {
 //		String query = "DELETE FROM order WHERE orderId = ?";

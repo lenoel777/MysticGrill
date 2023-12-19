@@ -1,7 +1,6 @@
 package model;
 
 import java.sql.Date;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ public class Receipt {
 	private int receiptId, receiptOrderId, receiptPaymentAmount;
 	private Date receiptPaymentDate;
 	private String receiptPaymentType;
+	private static ArrayList<Receipt> receipts = new ArrayList<>();
 	
 	public Receipt(int receiptId, int receiptOrderId, int receiptPaymentAmount, Date receiptPaymentDate,
 			String receiptPaymentType) {
@@ -24,7 +24,7 @@ public class Receipt {
 	}
 	
 	public static ArrayList<Receipt> loadReceipts() {
-		ArrayList<Receipt> Receipts = new ArrayList<>();
+		receipts.clear();
 		String query = "SELECT * FROM Receipt";
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
@@ -35,14 +35,14 @@ public class Receipt {
 				Date paymentDate = rs.getDate(4);
 				String paymentType = rs.getString(5);
 
-				Receipts.add(new Receipt(id, orderId, paymentAmount, paymentDate, paymentType));
+				receipts.add(new Receipt(id, orderId, paymentAmount, paymentDate, paymentType));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return Receipts;
+		return receipts;
 	}
 
 	public static void insertReceipt(int orderId, int paymentAmount, Date paymentDate, String paymentType) {

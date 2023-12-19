@@ -43,40 +43,40 @@ public class MenuItem {
 
 	public static void insertMenuItem(String menuItemName, String menuItemDescriptionint, int menuItemPrice) {
 		String query = String.format(
-				"INSERT INTO menuitem (menuItemName, menuItemDescriptionint, menuItemPrice) VALUES ('%s', '%s', %d)", 
+				"INSERT INTO menuitem (menuItemName, menuItemDescription, menuItemPrice) VALUES ('%s', '%s', %d)", 
 				menuItemName, menuItemDescriptionint, menuItemPrice);
 		Connect.getConnection().executeUpdate(query);
 	}
 
-//	public static void deleteMenuItem(int id) {
-//		String query = "DELETE FROM menuitem WHERE menuItemId = ?";
-//		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
-//
-//		try {
-//			ps.setInt(1, id);
-//			ps.execute();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+	public static void deleteMenuItem(int id) {
+		String query = "DELETE FROM menuitem WHERE menuItemId = ?";
+		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
 
-//	public static void updateMenuItem(int id, String menuItemName, String menuItemDescription, int menuItemPrice) {
-//		String query = "UPDATE menuitem SET menuItemName = ?, menuItemDescription = ?, menuItemPrice = ? WHERE menuItemId = ?";
-//
-//		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
-//
-//		try {
-//			ps.setString(1, menuItemName);
-//			ps.setString(2, menuItemDescription);
-//			ps.setInt(3, menuItemPrice);
-//			ps.setInt(4, id);
-//			ps.execute();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
+		try {
+			ps.setInt(1, id);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static void updateMenuItem(int id, String menuItemName, String menuItemDescription, int menuItemPrice) {
+		String query = "UPDATE menuitem SET menuItemName = ?, menuItemDescription = ?, menuItemPrice = ? WHERE menuItemId = ?";
+
+		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
+
+		try {
+			ps.setString(1, menuItemName);
+			ps.setString(2, menuItemDescription);
+			ps.setInt(3, menuItemPrice);
+			ps.setInt(4, id);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public int getMenuItemId() {
 		return menuItemId;

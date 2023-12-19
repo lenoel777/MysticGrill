@@ -10,6 +10,8 @@ import database.Connect;
 public class User {
 	private int userId;
 	private String userRole, userName, userEmail, userPassword;
+	private static User currUser;
+	private static ArrayList<User> users;
 	
 	public User(int userId, String userRole, String userName, String userEmail, String userPassword) {
 		super();
@@ -21,7 +23,7 @@ public class User {
 	}
 	
 	public static ArrayList<User> loadUsers() {
-		ArrayList<User> users = new ArrayList<>();
+		users = new ArrayList<>();
 		String query = "SELECT * FROM user";
 		ResultSet rs = Connect.getConnection().executeQuery(query);
 		try {
@@ -62,22 +64,37 @@ public class User {
 		}
 	}
 
-	public static void updateUser(int id, String role, String name, String email, String password) {
-		String query = "UPDATE user SET userRole = ?, userName = ?, userEmail = ?, userPassword = ? WHERE userId = ?";
+//	public static void updateUser(int id, String role, String name, String email, String password) {
+//		String query = "UPDATE user SET userRole = ?, userName = ?, userEmail = ?, userPassword = ? WHERE userId = ?";
+//
+//		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
+//
+//		try {
+//			ps.setString(1, role);
+//			ps.setString(2, name);
+//			ps.setString(3, email);
+//			ps.setString(4, password);
+//			ps.setInt(5, id);
+//			ps.execute();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
+	public static void updateUserRole(String role, int id) {
+		  String query = "UPDATE user SET userRole = ? WHERE userId = ?";
 
-		PreparedStatement ps = Connect.getConnection().prepareStatement(query);
+		  PreparedStatement ps = Connect.getConnection().prepareStatement(query);
 
-		try {
-			ps.setString(1, role);
-			ps.setString(2, name);
-			ps.setString(3, email);
-			ps.setString(4, password);
-			ps.setInt(5, id);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		  try {
+		   ps.setString(1, role);
+		   ps.setInt(2, id);
+		   ps.execute();
+		  } catch (SQLException e) {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+		  }
 	}
 
 	public int getUserId() {
@@ -118,6 +135,22 @@ public class User {
 
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
+	}
+
+	public static User getCurrUser() {
+		return currUser;
+	}
+
+	public static void setCurrUser(User currUser) {
+		User.currUser = currUser;
+	}
+
+	public static ArrayList<User> getUsers() {
+		return users;
+	}
+
+	public static void setUsers(ArrayList<User> users) {
+		User.users = users;
 	}
 	
 }
