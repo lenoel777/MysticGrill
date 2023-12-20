@@ -14,7 +14,7 @@ public class Register extends VBox {
     private TextField tfemail;
     private TextField password;
     private TextField confirm;
-    private Button tmblRegis;
+    private Button tmblRegis, backBtn;
     private Label lbl;
     
     public Register() {
@@ -31,13 +31,14 @@ public class Register extends VBox {
     	confirm.setPromptText("Confirm Password");
     	
     	tmblRegis = new Button("Register");
+    	backBtn = new Button("Back to Login");
     	
     	lbl = new Label();
     	lbl.setPadding(new Insets(10));
     	
     	this.setPadding(new Insets(10));
     	this.setAlignment(Pos.CENTER);
-    	this.getChildren().addAll(titleLabel(), name, tfemail, password, confirm, tmblRegis, lbl);
+    	this.getChildren().addAll(titleLabel(), createLayout(name, tfemail, password, confirm, tmblRegis, backBtn), lbl);
     	
     	Scene scene = new Scene(this, 400, 300);
     	Main.setSceneTo(scene);
@@ -49,6 +50,15 @@ public class Register extends VBox {
         title.setPadding(new Insets(10, 0, 0, 0));
         return title;
     }
+    
+    private VBox createLayout(TextField username, TextField email, TextField uPassword, TextField confirmPass, Button tmblRegister, Button backBtn) {
+        VBox layout = new VBox(10);
+        layout.setPadding(new Insets(10));
+        layout.setAlignment(Pos.CENTER);
+        layout.getChildren().addAll(username, email, uPassword, confirmPass, tmblRegister, backBtn);
+        return layout;
+    }
+
 
 	public TextField getName() {
 		return name;
@@ -68,6 +78,10 @@ public class Register extends VBox {
 
 	public Button getTmblRegis() {
 		return tmblRegis;
+	}
+	
+	public Button getBackBtn() {
+		return backBtn;
 	}
 
 	public Label getLbl() {

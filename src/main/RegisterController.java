@@ -1,9 +1,6 @@
 package main;
 
-import database.Connect;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 import model.User;
 
 public class RegisterController {
@@ -14,6 +11,7 @@ public class RegisterController {
         this.view = view;
         
     	view.getTmblRegis().setOnAction(e -> registerAction());
+    	view.getBackBtn().setOnAction(e -> moveToLoginPage());
     }
 
     public void registerAction() {
