@@ -57,6 +57,7 @@ public class OrderedMenuItemController {
     
     private void loadTableData() {
     	Order.loadOrders();
+    	
 		data.clear();
 		data.addAll(getUsersOrderItems());
 		if (data != null && !data.isEmpty()) {

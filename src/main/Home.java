@@ -33,7 +33,7 @@ public class Home extends VBox {
         BorderPane layout = new BorderPane();
 
         // pesan selamat datang di tengah menuBar
-        Label welcomeLabel = new Label("HELLO, " + User.getCurrUser().getUserName() +"\nWELCOME TO MYSTIC GRILL\nSilahkan pesan makan yang Anda mau");
+        Label welcomeLabel = new Label("HELLO, " + User.getCurrUser().getUserName() +"\nWELCOME TO MYSTIC GRILL");
         welcomeLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
         VBox welcomeBox = new VBox(welcomeLabel);
         welcomeBox.setAlignment(javafx.geometry.Pos.CENTER);
@@ -108,22 +108,28 @@ public class Home extends VBox {
         	moveToViewServe();
         });
         
+        // LOGOUT
+        Label logoutLbl = new Label("Logout");
+        Menu menuLogout = new Menu("", logoutLbl);
+        logoutLbl.setOnMouseClicked(e -> logout());
+        
         // Buat Munculin Menu Bar dari Home
         String role = User.getCurrUser().getUserRole();
         if(role.equals("Admin")) {
-//        	menuBar.getMenus().addAll(menuHome, menuManageUser, menuManageMI);
+        	menuBar.getMenus().addAll(menuHome, menuManageUser, menuManageMI, menuLogout);
         }else if(role.equals("Cashier")){
-        	menuBar.getMenus().addAll(menuHome, menuViewOrder, menuViewReceipt);
+        	menuBar.getMenus().addAll(menuHome, menuViewOrder, menuViewReceipt, menuLogout);
         }else if(role.equals("Customer")) {
-        	menuBar.getMenus().addAll(menuHome, menuViewMI, menuViewOrderedMI);
+        	menuBar.getMenus().addAll(menuHome, menuViewMI, menuViewOrderedMI, menuLogout);
         }else if(role.equals("Chef")) {
-        	menuBar.getMenus().addAll(menuHome, menuViewPrepare);
+        	menuBar.getMenus().addAll(menuHome, menuViewPrepare, menuLogout);
         }else if(role.equals("Waiter")) {
-        	menuBar.getMenus().addAll(menuHome, menuViewServe);
+        	menuBar.getMenus().addAll(menuHome, menuViewServe, menuLogout);
         }
         
-        menuBar.getMenus().addAll(menuHome, menuManageUser, menuManageMI, menuViewOrder, menuViewReceipt, menuViewMI, 
-        		menuViewOrderedMI, menuViewPrepare, menuViewServe);
+        
+//        menuBar.getMenus().addAll(menuHome, menuManageUser, menuManageMI, menuViewOrder, menuViewReceipt, menuViewMI, 
+//        		menuViewOrderedMI, menuViewPrepare, menuViewServe, menuLogout);
         
         return menuBar;
     }
@@ -178,6 +184,13 @@ public class Home extends VBox {
     	ViewServe vs;
     	setPage(vs = new ViewServe(), "View Prepared Orders");
     	new ServeController(vs);
+    }
+    
+    private static void logout() {
+    	User.setCurrUser(null);
+    	
+    	Login login = new Login();
+		new LoginController(login);
     }
 
     public static void setPage(javafx.scene.Node content, String pageTitle) {

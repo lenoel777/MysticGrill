@@ -62,10 +62,10 @@ public class PrepareController {
 	        if (selectedOrder != null) {
 	            selectedOrderId = selectedOrder.getOrderId();
 	            String userId = viewPending.getOrderUserId().getText();
-	            String status = viewPending.getOrderStatus().getText();
 	            String date = viewPending.getOrderDate().getText();
+	            int total = Integer.parseInt(viewPending.getOrderTotal().getText());
 
-	            updateUserOrder(selectedOrderId, userId, status, date);
+	            updateUserOrder(selectedOrderId, userId, date, total);
 	            loadTableData();
 	        } else {
 	        	showAlert("Failed to update order.");
@@ -112,6 +112,8 @@ public class PrepareController {
             e.printStackTrace();
             showAlert("Failed to update order status.");
         }
+        
+        loadTableData();
     }
 	
 	public void deleteUserOrder(int orderId) {
@@ -137,16 +139,18 @@ public class PrepareController {
 	        e.printStackTrace();
 	        showAlert("Failed to delete menu item from the database.");
 	    }
+	    
+	    loadTableData();
 	}
 	
 	//update order
-	public void updateUserOrder(int orderId, String userId, String status, String date) {
-	    String query = "UPDATE `order` SET orderUserId = ?, orderStatus = ?, orderDate = ? WHERE orderId = ?";
+	public void updateUserOrder(int orderId, String userId, String date, int total) {
+	    String query = "UPDATE `order` SET orderUserId = ?, orderDate = ?, orderTotal = ? WHERE orderId = ?";
 
 	    try (PreparedStatement statement = connect.prepareStatement(query)) {
 	        statement.setString(1, userId);
-	        statement.setString(2, status);
-	        statement.setString(3, date);
+	        statement.setString(2, date);
+	        statement.setInt(3, total);
 	        statement.setInt(4, orderId);
 
 	        int rowsAffected = statement.executeUpdate();
@@ -159,6 +163,8 @@ public class PrepareController {
 	        e.printStackTrace();
 	        showAlert("Failed to update order.");
 	    }
+	    
+	    loadTableData();
 	}
 	
 	private void showAlert(String content) {

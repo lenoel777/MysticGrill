@@ -16,7 +16,6 @@ import model.MenuItem;
 public class ViewMenuItem extends VBox {
 
 	private TableView<MenuItem> table;
-	private ObservableList<MenuItem> data;
 
 	private TextField idMenu = new TextField();
 	private TextField nameMenu = new TextField();
@@ -28,21 +27,10 @@ public class ViewMenuItem extends VBox {
 
 	public ViewMenuItem() {
 		table = createProductTable(); // Initialize the table
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		GridPane form = createProductForm(table);
 		VBox.setMargin(form, new Insets(20));
 		this.getChildren().addAll(table, form); // Use getChildren() directly on VBox
-
-		data = FXCollections.observableArrayList(MenuItem.loadMenuItems());
-		table.setItems(data);
-
-		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-		table.setOnMouseClicked(event -> {
-			MenuItem selectedItem = table.getSelectionModel().getSelectedItem();
-			if (selectedItem != null) {
-				displaySelectedItem(selectedItem);
-			}
-		});
 	}
 
 	private TableView<MenuItem> createProductTable() {
@@ -91,13 +79,6 @@ public class ViewMenuItem extends VBox {
 		return form;
 	}
 
-	private void displaySelectedItem(MenuItem selectedItem) {
-		idMenu.setText(String.valueOf(selectedItem.getMenuItemId()));
-		nameMenu.setText(selectedItem.getMenuItemName());
-		deskripsiMenu.setText(selectedItem.getMenuItemDescription());
-		priceMenu.setText(String.valueOf(selectedItem.getMenuItemPrice()));
-	}
-
 	public TextField getIdMenu() {
 		return idMenu;
 	}
@@ -124,9 +105,5 @@ public class ViewMenuItem extends VBox {
 
 	public TableView<MenuItem> getTable() {
 		return table;
-	}
-
-	public ObservableList<MenuItem> getData() {
-		return data;
 	}
 }
